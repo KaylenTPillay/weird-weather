@@ -6,8 +6,15 @@ location.
 
 Authors: [ Darshan Pillay, Kaylen Pillay ]
 """
-def __helloWorld():
-    print("Hello, World!")
+import keystore
+import networkUtils
 
-if __name__ == "__main__":
-    __helloWorld()
+# The request string used to fetch data from the server.
+request_url = networkUtils.create_forecast_request_url(keystore.API_KEY["key"], forecast_length=1)
+
+# Get the WeatherResponse object from the network call
+response_object = networkUtils.fetch_weather_json_data(request_url)
+
+# Display the result to the user
+print(f"The response code was {response_object.get_response_code()}")
+print(f"The response data was {response_object.get_raw_response_data()}")
