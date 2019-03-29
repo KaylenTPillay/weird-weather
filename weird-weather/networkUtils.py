@@ -25,7 +25,7 @@ def create_forecast_request_url(api_key, city_name="Cape Town", country_name="So
     else:
         valid_forecast_length = forecast_length
 
-    api_method = "forecast?"
+    api_method = "weather?"
     query_string = urllib.urlencode(OrderedDict(q=__get_city_country(city_name, country_name),
                                                 cnt=valid_forecast_length,
                                                 APPID=api_key))
@@ -33,8 +33,16 @@ def create_forecast_request_url(api_key, city_name="Cape Town", country_name="So
 
 
 def fetch_weather_json_data(request_url):
-    http = urllib3.PoolManager(
-        cert_reqs="CERT_REQUIRED",
-        ca_certs=certifi.where())
+    http = urllib3.PoolManager(cert_reqs="CERT_REQUIRED",
+                               ca_certs=certifi.where())
     response = http.request(__GET_METHOD__, request_url)
     return WeatherResponse(response.status, response.data)
+
+
+def is_response_successful(response_code):
+    response_code_string = str(response_code)
+    if response_code_string[0] == '2':
+        return True
+    else:
+        return False
+
